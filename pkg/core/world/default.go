@@ -2,10 +2,11 @@ package world
 
 import (
 	"context"
-	"llm-simulation/pkg/core/action"
-	"llm-simulation/pkg/core/agent"
-	"llm-simulation/pkg/core/logger"
 	"log/slog"
+	"simulacra/pkg/core/action"
+	"simulacra/pkg/core/agent"
+	"simulacra/pkg/core/logger"
+	"simulacra/pkg/core/timemanager"
 	"sync"
 )
 
@@ -16,6 +17,7 @@ type SimpleWorld struct {
 	state      map[string]interface{}
 	agents     []agent.Agent
 	plugins    []WorldPlugin
+	tm         timemanager.TimeManager
 	mutex      sync.Mutex
 	actionChan <-chan action.Action
 }
@@ -30,7 +32,7 @@ func (w *SimpleWorld) Initialize(ctx context.Context, config map[string]interfac
 	return nil
 }
 
-func (w *SimpleWorld) Update(ctx context.Context) error {
+func (w *SimpleWorld) Step(ctx context.Context) error {
 	return nil
 }
 

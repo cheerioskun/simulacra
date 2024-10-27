@@ -2,7 +2,7 @@ package memory
 
 import (
 	"context"
-	"llm-simulation/pkg/core/store"
+	"simulacra/pkg/core/store"
 )
 
 type MemoryScore int

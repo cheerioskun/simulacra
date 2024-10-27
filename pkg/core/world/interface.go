@@ -2,15 +2,16 @@ package world
 
 import (
 	"context"
-	"llm-simulation/pkg/core/action"
-	"llm-simulation/pkg/core/agent"
+	"simulacra/pkg/core/action"
+	"simulacra/pkg/core/agent"
 )
 
 // World defines the interface for the simulation world
 type World interface {
 	// Core world operations
 	Initialize(ctx context.Context, config map[string]interface{}) error
-	Update(ctx context.Context) error
+	// Step advances the world by one timestep
+	Step(ctx context.Context) error
 
 	// Action system
 	ActionChan() <-chan action.Action

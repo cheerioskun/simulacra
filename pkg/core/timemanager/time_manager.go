@@ -1,6 +1,9 @@
 package timemanager
 
 import (
+	"context"
+	"log/slog"
+	"simulacra/pkg/core/logger"
 	"sync"
 	"time"
 )
@@ -15,15 +18,17 @@ type TimeManager struct {
 	isPaused            bool
 	pausedAt            time.Time
 	totalPausedDuration time.Duration
+	log                 *slog.Logger
 }
 
-func NewTimeManager() *TimeManager {
+func NewTimeManager(ctx context.Context) *TimeManager {
 	now := time.Now()
 	return &TimeManager{
 		simulationSpeed: 1.0,
 		startTime:       now,
 		simStartTime:    now,
 		isPaused:        false,
+		log:             ctx.Value(logger.Key).(*slog.Logger).With(logger.CategoryKey, logger.CategoryTimeManager),
 	}
 }
 

@@ -2,7 +2,7 @@ package world
 
 import (
 	"context"
-	"llm-simulation/pkg/core/agent"
+	"simulacra/pkg/core/agent"
 )
 
 // WorldPlugin defines the interface for world plugins

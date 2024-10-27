@@ -7,12 +7,13 @@ import (
 
 // Categories for our simulation
 const (
-	CategoryAgent    = "agent"
-	CategoryWorld    = "world"
-	CategoryPlugin   = "plugin"
-	CategorySystem   = "system"
-	CategoryResearch = "research"
-	CategoryPerf     = "performance"
+	CategoryAgent       = "agent"
+	CategoryWorld       = "world"
+	CategoryPlugin      = "plugin"
+	CategorySystem      = "system"
+	CategoryTimeManager = "time_manager"
+	CategoryResearch    = "research"
+	CategoryPerf        = "performance"
 )
 
 // SetupLogger configures slog for our simulation

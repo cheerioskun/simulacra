@@ -2,10 +2,10 @@ package memory
 
 import (
 	"context"
-	"llm-simulation/pkg/core/action"
-	"llm-simulation/pkg/core/agent"
-	"llm-simulation/pkg/core/logger"
 	"log/slog"
+	"simulacra/pkg/core/action"
+	"simulacra/pkg/core/agent"
+	"simulacra/pkg/core/logger"
 )
 
 type AgentMemoryPlugin struct {

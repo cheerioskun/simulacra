@@ -2,7 +2,7 @@ package agent
 
 import (
 	"context"
-	"llm-simulation/pkg/core/action"
+	"simulacra/pkg/core/action"
 	"time"
 )
 
