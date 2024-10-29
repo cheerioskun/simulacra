@@ -29,3 +29,5 @@ func (a *SimpleAction) GetType() string {
 func (a *SimpleAction) Intent() string {
 	return a.IntentDescription
 }
+
+var _ Action = &SimpleAction{}

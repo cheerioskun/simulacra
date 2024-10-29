@@ -18,7 +18,9 @@ var _ agent.AgentPlugin = &AgentMemoryPlugin{}
 func NewAgentMemoryPlugin(ctx context.Context) *AgentMemoryPlugin {
 	return &AgentMemoryPlugin{
 		memory: NewMemoryStore(100, nil),
-		log:    ctx.Value(logger.Key).(*slog.Logger).With(logger.CategoryKey, logger.CategoryPlugin),
+		log: ctx.Value(logger.Key).(*slog.Logger).With(
+			logger.CategoryKey, logger.CategoryPlugin,
+			"name", "AgentMemoryPlugin"),
 	}
 }
 
@@ -48,8 +50,8 @@ func (p *AgentMemoryPlugin) OnAction(ctx context.Context, action action.Action) 
 	return nil
 }
 
-func (p *AgentMemoryPlugin) PreThink(ctx context.Context, input string) (string, error) {
-	return input, nil
+func (p *AgentMemoryPlugin) PreThink(ctx context.Context, thought *agent.Thought) error {
+	return nil
 }
 
 func (p *AgentMemoryPlugin) PostThink(ctx context.Context, thought *agent.Thought) error {

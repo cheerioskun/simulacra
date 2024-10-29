@@ -1,6 +1,7 @@
 # Simulacra
 
 A modular Go package for interacting with various LLM providers, with a focus on structured outputs and tool usage.
+Inspired by [Generative Agents: Interactive Simulacra of Human Behavior](https://arxiv.org/abs/2309.08508).
 
 ## Features
 

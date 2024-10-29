@@ -17,7 +17,7 @@ type AgentPlugin interface {
 	OnUnload() error
 
 	// Core hooks
-	PreThink(ctx context.Context, input string) (string, error)
+	PreThink(ctx context.Context, thought *Thought) error
 	PostThink(ctx context.Context, thought *Thought) error
 	PreAction(ctx context.Context, action action.Action) error
 	PostAction(ctx context.Context, action action.Action) error

@@ -1,68 +1,75 @@
 package world
 
 import (
-	"context"
+	"encoding/json"
 	"log/slog"
-	"simulacra/pkg/core/action"
-	"simulacra/pkg/core/agent"
 	"simulacra/pkg/core/logger"
-	"simulacra/pkg/core/timemanager"
+	"simulacra/pkg/core/store"
 	"sync"
+
+	"github.com/davecgh/go-spew/spew"
 )
 
-type SimpleWorld struct {
-	World
-	log        *slog.Logger
-	config     map[string]interface{}
-	state      map[string]interface{}
-	agents     []agent.Agent
-	plugins    []WorldPlugin
-	tm         timemanager.TimeManager
-	mutex      sync.Mutex
-	actionChan <-chan action.Action
+type defaultWorld struct {
+	state store.DefaultStoreType
+	mu    sync.RWMutex
+	log   *slog.Logger
 }
 
-func DefaultWorld() *SimpleWorld {
-	return &SimpleWorld{}
+func NewDefaultWorld(log *slog.Logger) *defaultWorld {
+	return &defaultWorld{
+		state: store.DefaultStore(),
+		log:   log.With(logger.CategoryKey, logger.CategoryWorld),
+	}
 }
 
-func (w *SimpleWorld) Initialize(ctx context.Context, config map[string]interface{}) error {
-	w.log = ctx.Value(logger.Key).(*slog.Logger).With(logger.CategoryKey, logger.CategoryWorld)
-	w.config = config
+func (w *defaultWorld) GetState() map[string]interface{} {
+	w.mu.RLock()
+	defer w.mu.RUnlock()
+
+	w.log.Debug("Getting world state")
+	s, err := w.state.Get([]byte(StatePrefix), nil)
+	if err != nil {
+		w.log.Error("Failed to get state", "error", err)
+		return nil
+	}
+
+	var ret map[string]interface{}
+	err = json.Unmarshal(s, &ret)
+	if err != nil {
+		w.log.Error("Failed to unmarshal state", "error", err)
+		return nil
+	}
+
+	w.log.Debug("Successfully retrieved world state")
+	return ret
+}
+
+func (w *defaultWorld) SetState(state map[string]interface{}) error {
+	w.mu.Lock()
+	defer w.mu.Unlock()
+
+	b, err := json.Marshal(state)
+	if err != nil {
+		w.log.Error("Failed to marshal state", "error", err)
+		return err
+	}
+
+	if err := w.state.Put([]byte(StatePrefix), b, nil); err != nil {
+		w.log.Error("Failed to set state", "error", err)
+		return err
+	}
+
+	w.log.Debug("Successfully set world state", "state", spew.Sdump(state))
 	return nil
 }
 
-func (w *SimpleWorld) Step(ctx context.Context) error {
-	return nil
+func (w *defaultWorld) IsValidAction(action interface{}) bool {
+	// TODO: Implement action validation logic
+	return true
 }
 
-func (w *SimpleWorld) GetState() map[string]interface{} {
-	return w.state
-}
-
-func (w *SimpleWorld) SetState(key string, value interface{}) error {
-	w.state[key] = value
-	return nil
-}
-
-func (w *SimpleWorld) AddAgent(ctx context.Context, agent agent.Agent) error {
-	w.agents = append(w.agents, agent)
-	return nil
-}
-
-func (w *SimpleWorld) RemoveAgent(ctx context.Context, agentID string) error {
-	return nil
-}
-
-func (w *SimpleWorld) GetAgent(agentID string) (agent.Agent, error) {
-	return nil, nil
-}
-
-func (w *SimpleWorld) GetPlugins() []WorldPlugin {
-	return w.plugins
-}
-
-func (w *SimpleWorld) RegisterPlugin(plugin WorldPlugin) error {
-	w.plugins = append(w.plugins, plugin)
-	return nil
+func (w *defaultWorld) ApplyAction(action interface{}) (string, error) {
+	// TODO: Implement action application logic
+	return "", nil
 }
